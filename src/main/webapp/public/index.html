@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <form  method="post" enctype="multipart/form-data" >
+        <input name="file" type="file"/>
+        <button type="button" onclick="ajaxsubmit()" value="">文件上传</button>
+    </form>
+</div>
+<div id="content"></div>
+</body>
+<script>
+    function ajaxsubmit(){
+        let formData = new FormData();
+        let fileField = document.querySelector("input[type='file']");
+
+        formData.append('file', fileField.files[0]);
+        fetch('upload', {
+            method: 'post',
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data=>{
+                alert(data.msg)
+                location.reload();
+
+            })
+    }
+    fetch("getlist").then((res)=>{return res.json()}).then(data=>{
+        let content = document.getElementById("content");
+        for (let i = 0; i < data.length; i++) {
+            let a = document.createElement("a");
+            a.setAttribute("href","file/"+data[i].name)
+            a.textContent=data[i].name+"----"+data[i].modifytime+"-------"+data[i].size
+            content.appendChild(a)
+            content.appendChild(document.createElement("br"))
+
+        }
+
+        
+    })
+</script>
+</html>
